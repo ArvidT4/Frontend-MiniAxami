@@ -1,25 +1,27 @@
 <script>
-    import Unit from "./unit/Unit.svelte";
-    import {units, token} from "./store"
-    import Navbar from "./Navbar.svelte";
+    import {units, token} from "../store"
+    import Navbar from "../Navbar.svelte";
+    import Unit from "../unit/Unit.svelte";
     
     getUnits()
     async function getUnits(){
 
-        let url = "https://mini-axami-server.arvpet0320.repl.co/allUnits";
+        let url = "https://mini-axami-server.arvpet0320.repl.co/allWork";
 
         let response = await fetch(url,{
             headers:{"newtoken":$token}
         })
-        $units = await response.json()
+        let json = await response.json()
+        console.log(json)
+        units.set(json)
     }
-
+    $: console.log($units)
 
 </script>
 <Navbar></Navbar>
-<h2>YOUR UNITS</h2>
+<h2>UNITS</h2>
 {#each $units as unit }
-    <Unit unit={unit}></Unit>
+    <Unit unit={unit}/>
 {/each}
 
 <style>
