@@ -21,6 +21,17 @@
         priority = task.priority
     })
 
+
+    async function claimTask(){
+        let url = "https://mini-axami-server.arvpet0320.repl.co/updateWorker/"+task.id;
+
+        let response = await fetch(url,{
+            headers:{"newtoken":$token}
+        })
+        let json = await response.json()
+        console.log(json)
+    }
+
     //console.log(task)
     async function finishTask(){
         
@@ -65,6 +76,11 @@
             <div class="koll p-3 rounded border" on:keypress on:click={finishTask}> Finish task</div>
         </div>
         {:else}
+        <div class="col">
+            <div class="koll p-1 rounded border" on:keypress on:click={claimTask}>
+                <h5>Claim task</h5>
+            </div>
+        </div>
         <div class="col rounded ">
             <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Finish task</h5></div>
         </div>
@@ -125,6 +141,7 @@
 {/if}
 
 <style>
+   
     .koll{
         /* border: 1px solid black; */
         background-color: white;

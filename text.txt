@@ -4,3 +4,6 @@ skapa ny task
 klarmarkera task
 skriva kommentarer
 token store
+
+Arbetare kan ta sig bort från unit //klar 
+arbetare kunna markera "jag tar jobbet"

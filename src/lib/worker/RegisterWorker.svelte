@@ -1,7 +1,7 @@
 <script>
   import {push} from "svelte-spa-router"
     let name, email;
-    localStorage.clear()
+    $: localStorage.clear()
     async function registerWorker(){
         
         let url = "https://mini-axami-server.arvpet0320.repl.co/registerWorker";

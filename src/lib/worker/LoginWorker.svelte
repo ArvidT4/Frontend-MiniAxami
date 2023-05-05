@@ -2,10 +2,10 @@
     import {push} from "svelte-spa-router"
     import {token, worker} from "../store"
       let email;
-    
+      $: localStorage.clear()
       async function loginWorker(){
           localStorage.clear()
-          
+
           let url = "https://mini-axami-server.arvpet0320.repl.co/loginWorker";
           let response = await fetch(url,{
               
@@ -18,10 +18,11 @@
               })
           })
           const json = await response.json()
-          console.log(json)
+          //console.log(json)
           token.set(json.token)
           worker.set(true)
           push("/ValidateCode")
+          console.log($token)
       }
   </script>
   

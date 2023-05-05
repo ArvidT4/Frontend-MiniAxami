@@ -2,7 +2,7 @@
     import {push} from "svelte-spa-router"
     import { token } from "../store";
       let code;
-    
+      $: localStorage.clear()
       async function registerWorker(){
           
           let url = "https://mini-axami-server.arvpet0320.repl.co/code";
@@ -18,9 +18,9 @@
               })
           })
           const json = await response.json()
-          console.log(json)
+          //console.log(json)
           token.set(json.newToken)
-          push("/Home")
+          push("/Units")
       }
   </script>
   

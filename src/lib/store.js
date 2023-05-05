@@ -7,12 +7,14 @@ import {writable} from "svelte/store"
 
 export const dateYear = writable("")
 export const dateHour = writable("")
+export const updateWorkRel = writable(false)
 
 const storedToken = localStorage.getItem("token"); 
 
 export const token = writable(storedToken||"")
 
 token.subscribe((value)=>localStorage.setItem("token",value))
+
 
 
 let storedUnits = [];
@@ -42,6 +44,7 @@ export const tasks = writable(storedTasks)
 tasks.subscribe((value)=>localStorage.setItem("tasks",JSON.stringify(value)))
 
 
+
 let storedWorker = false;
 try{
     if(localStorage.getItem("worker")){
@@ -53,3 +56,17 @@ catch(err){}
 export const worker = writable(storedWorker)
 
 worker.subscribe((value)=>localStorage.setItem("worker",JSON.stringify(value)))
+
+
+
+let storedTokenExpired = false;
+try{
+    if(localStorage.getItem("tokenExpired")){
+        storedTokenExpired = JSON.parse(localStorage.getItem("tokenExpired"))
+    }
+}
+catch(err){}
+
+export const tokenExpired = writable(storedTokenExpired)
+
+tokenExpired.subscribe((value)=>localStorage.setItem("tokenExpired",JSON.stringify(value)))

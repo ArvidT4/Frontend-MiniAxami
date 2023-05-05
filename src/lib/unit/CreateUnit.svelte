@@ -1,8 +1,11 @@
  <script>
 import Navbar from "../Navbar.svelte";
 import { push } from "svelte-spa-router";
-import {units, token} from "../store"
+import {units, token, worker} from "../store"
    
+    $: if($worker){
+        push("/HomeWorker")
+    }
     let name, adress, description,priority;
 
     let deadline = (new Date()).toJSON().slice(0, 10);
@@ -29,7 +32,7 @@ import {units, token} from "../store"
        push("/unitInfo/"+json.id)
 
     }
-    $:console.log(deadline)
+    //$:console.log(deadline)
     
     
  </script>

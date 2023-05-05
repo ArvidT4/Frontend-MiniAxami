@@ -3,7 +3,7 @@
     import {push,pop,replace} from "svelte-spa-router"
 
 
-
+    $: localStorage.clear()
     let email, password;
     async function Login(){
         

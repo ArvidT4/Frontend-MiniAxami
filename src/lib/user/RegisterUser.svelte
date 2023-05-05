@@ -3,7 +3,7 @@
 
 
     let name, email, password;
-
+    $: localStorage.clear()
     async function registerUser(){
         
         let url = "https://mini-axami-server.arvpet0320.repl.co/register";

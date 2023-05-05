@@ -32,10 +32,10 @@ async function deleteTask(){
 
 <style>
     .bi{
-        font-size:40px;
+        font-size:30px;
     }
     .border{
-        margin: 5px;
+        margin:5px;
         padding: 5px;
     }
 </style>

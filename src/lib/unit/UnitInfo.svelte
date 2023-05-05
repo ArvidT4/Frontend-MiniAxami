@@ -1,7 +1,7 @@
 <script>
     import { push,pop } from "svelte-spa-router";
 import Navbar from "../Navbar.svelte";
-import {units,token,tasks,worker} from "../store"
+import {units,token,tasks,worker, updateWorkRel} from "../store"
 import Task from "../task/Task.svelte";
 import GiveWork from "../worker/GiveWork.svelte";
     import EditUnit from "./EditUnit.svelte";
@@ -13,7 +13,22 @@ let id = params.id
     
     // hitta en unit med rätt id.
     let unit = $units.find(u=>u.id==id);
+    let workRel = []
+    getWorkRel()
+    $:if($updateWorkRel==true){
+        getWorkRel()
+        updateWorkRel.set(false);
+    }
+    async function getWorkRel(){
 
+        let url = "https://mini-axami-server.arvpet0320.repl.co/workRel/"+id;
+
+        let response = await fetch(url,{
+            headers:{"newtoken":$token}
+        })
+        let json = await response.json()
+        workRel = json
+    }
     getTasks()
     async function getTasks(){
 
@@ -50,6 +65,29 @@ let id = params.id
 
         pop();
 }
+let t = JSON.parse(atob($token.split(".")[1]))
+async function deleteWorkRel(){
+        let response = await fetch('https://mini-axami-server.arvpet0320.repl.co/removeWorkRel',{
+            method:'DELETE',
+            headers:{
+                "newtoken":$token,
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+                "worker_id": t.id,
+                "unit_id": id
+            })
+        }) 
+        let json = await response.json()
+        console.log(json)
+
+        if(json.error){return}
+        
+        units.update(old => old.filter(u=>u.id!=id));
+
+        pop();
+}
+
     function editUnit(){
         push("/UnitInfo/"+unit.id+"/EditUnit/")
     }
@@ -59,10 +97,8 @@ let id = params.id
 <main>
     <div class="card" id="wrap">
         <div class="card-header">
-            {#if $worker}
-            <h2 class="text-center">{unit.name}</h2>
-            {/if}
-            {#if !$worker}
+            
+            
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid text-center">
                     
@@ -75,27 +111,52 @@ let id = params.id
                     
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center ul">
+                            {#if !$worker}
                         <li class="nav-item rounded border bg-white editP">
-                            <p on:keypress on:click={editUnit}>Redigera</p>
+                            <p on:keypress on:click={editUnit}>Edit <i class="bi bi-pencil-square"></i></p>
                         </li>
                         <li class="nav-item rounded border bg-white">
                             {#if remove == true}
-                            <p on:keypress on:click={deleteUnit}>Är du säker på att du vill ta bort?</p>
+                            <p on:keypress on:click={deleteUnit}>Are you sure?</p>
                             {:else}
-                            <p on:keypress on:click={deleteClick}>Ta bort</p>
+                            <p on:keypress on:click={deleteClick}>Remove unit <i class="bi bi-trash"></i></p>
                             {/if}
                             
                         </li>
+                        <li>
+                            <h5 class="addWorker">Add worker</h5>
+                        </li>
+                        <form class="d-flex" role="search">
+                            <GiveWork unit_id={id}></GiveWork>
+                        </form>
+                        {#if workRel.length !=0}
+                            <li>
+                                <h5>Alla arbetare kopplade</h5>
+                                
+                                    {#each workRel as user}
+                                    <p>{user.name} : {user.email}</p>
+                                    {/each}
+                            
+                            </li>
+                        {/if}
+                        {:else}
+                        <li class="nav-item rounded border bg-white">
+                            {#if remove == true}
+                            <p on:keypress on:click={deleteWorkRel}>Are you sure?</p>
+                            {:else}
+                            <p on:keypress on:click={deleteClick}>Remove unit <i class="bi bi-trash"></i></p>
+                            {/if}
+                            
+                        </li>
+                        {/if}
                         
                         </ul>
-                        <form class="d-flex" role="search">
-                            <GiveWork unit_id={unit.id}></GiveWork>
-                        </form>
+                        
                     </div>
-                 
+                    
                 </div>
               </nav>
-              {/if}
+              
         </div>
         
         <div class="card-body">
@@ -118,7 +179,6 @@ let id = params.id
             {#each $tasks as task}
                 {#if unit.id==task.unit_id}
                     <Task task={task}></Task>
-                    
                 {/if} 
             {/each}
         </div>
@@ -126,6 +186,13 @@ let id = params.id
 </main>
 
 <style>
+    .addWorker{
+        margin-top: 15px;
+        margin-bottom: 0px;
+    }
+    .d-flex{
+        margin-top: 10px;
+    }
     .editP{
         margin-bottom: 10px;
     }

@@ -16,8 +16,6 @@
   import RegisterWorker from "./lib/worker/RegisterWorker.svelte";
   import LoginWorker from "./lib/worker/LoginWorker.svelte";
   import Validate from "./lib/worker/Validate.svelte";
-  import Homes from "./lib/worker/Home.svelte";
-  import WorkUnits from "./lib/worker/WorkUnits.svelte";
   import TaskInfo2 from "./lib/task/TaskInfo2.svelte";
   import EditUnit from "./lib/unit/EditUnit.svelte";
   let routes = {
@@ -33,8 +31,6 @@
     "/RegisterWorker": RegisterWorker,
     "/LoginWorker": LoginWorker,
     "/ValidateCode": Validate,
-    "/Home": Homes,
-    "/WorkUnit": WorkUnits,
     "/TaskInfo2": TaskInfo2,
     "/UnitInfo/:id/EditUnit/": EditUnit,
 
