@@ -5,6 +5,7 @@
     export let task;
     let count = 0;
     let info = ""
+    let t = JSON.parse(atob($token.split(".")[1]))
     function test(){
         
         if(count==1){
@@ -22,10 +23,24 @@
        
 </script>
 <div class="card">
-    {#if task.active==1}
-        <div class="card-body fs-5 active" on:keypress on:click={onClicked}>{task.title}</div>
+    {#if task.worker==t.name}
+        {#if task.active==1}
+            <div class="card-body fs-5 active bg-primary-subtle" on:keypress on:click={onClicked}>{task.title}</div>
+        {:else}
+            <div class="card-body fs-5 notActive bg-primary-subtle" on:keypress on:click={onClicked}>{task.title}</div>
+        {/if}
+    {:else if task.worker==""}
+        {#if task.active==1}
+            <div class="card-body fs-5 active bg-success-subtle" on:keypress on:click={onClicked}>{task.title}</div>
+        {:else if task.worker==""}
+            <div class="card-body fs-5 notActive bg-success-subtle" on:keypress on:click={onClicked}>{task.title}</div>
+        {/if}
     {:else}
-        <div class="card-body fs-5 notActive" on:keypress on:click={onClicked}>{task.title}</div>
+        {#if task.active==1}
+            <div class="card-body fs-5 active bg-danger-subtle" on:keypress on:click={onClicked}>{task.title}</div>
+        {:else if task.worker==""}
+            <div class="card-body fs-5 notActive bg-danger-subtle" on:keypress on:click={onClicked}>{task.title}</div>
+        {/if}
     {/if}
 </div>
 

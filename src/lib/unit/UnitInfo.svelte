@@ -97,9 +97,7 @@ async function deleteWorkRel(){
 <main>
     <div class="card" id="wrap">
         <div class="card-header">
-            
-            
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <nav class="navbar navbar bg-body-tertiary">
                 <div class="container-fluid text-center">
                     
                     

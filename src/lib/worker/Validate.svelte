@@ -33,12 +33,15 @@
           <label for="floatingInput">Your code</label>
         </div>
         
-        <div class="w-100 btn btn-lg bg-light bt text-dark border btn-primary" id="bt" on:keypress on:click={registerWorker}>Sign up as worker!</div>
+        <div class="w-100 btn btn-lg bg-light bt text-dark border btn-primary button" id="bt" on:keypress on:click={registerWorker}>Sign up as worker!</div>
       </form>
     </main>
   
   
   <style>
+    .button{
+      margin-top: 20px;
+    }
     main{
       max-width: 350px;
       margin: auto;

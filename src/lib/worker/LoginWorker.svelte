@@ -22,7 +22,7 @@
           token.set(json.token)
           worker.set(true)
           push("/ValidateCode")
-          console.log($token)
+          //console.log($token)
       }
   </script>
   

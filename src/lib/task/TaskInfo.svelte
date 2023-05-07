@@ -20,31 +20,39 @@
         activeCount = task.active
         priority = task.priority
     })
-
-
+    let t = JSON.parse(atob($token.split(".")[1]))
+    //console.log(t)
+    //console.log(task)
     async function claimTask(){
         let url = "https://mini-axami-server.arvpet0320.repl.co/updateWorker/"+task.id;
 
         let response = await fetch(url,{
+            method:'PUT',
             headers:{"newtoken":$token}
         })
         let json = await response.json()
-        console.log(json)
+        //console.log(json)
+        task = json
     }
-
+    //$:console.log(task.worker)
     //console.log(task)
+    let taken = false;
     async function finishTask(){
+        if(t.name==task.worker){
+            let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
+
+            let response = await fetch(url,{
+                headers:{"newtoken":$token}
+            })
+            let json = await response.json()
+            //console.log(json.message.active)
+            activeCount = json.message.active;
+            //console.log(activeCount)
+        }
+        else{
+            taken = true;
+        }
         
-
-        let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
-
-        let response = await fetch(url,{
-            headers:{"newtoken":$token}
-        })
-        let json = await response.json()
-        //console.log(json.message.active)
-        activeCount = json.message.active;
-        //console.log(task.active)
     }
 
     if(priority==1){
@@ -64,80 +72,108 @@
 <Navbar></Navbar>
 {#if task}
 <div class="container px-4 text-center">
+    
     {#if activeCount==1}
     <div class="row gx-3 justify-content-end ">
         {#if !$worker}
-        <div class="col">
-            
-            <DeleteTask task={task.id}></DeleteTask>
-            
-        </div>
-        <div class="col-5 rounded">
-            <div class="koll p-3 rounded border" on:keypress on:click={finishTask}> Finish task</div>
-        </div>
-        {:else}
-        <div class="col">
-            <div class="koll p-1 rounded border" on:keypress on:click={claimTask}>
-                <h5>Claim task</h5>
+            <div class="col">
+                <DeleteTask task={task.id}></DeleteTask>
             </div>
-        </div>
-        <div class="col rounded ">
-            <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Finish task</h5></div>
-        </div>
+            <div class="col-5 rounded">
+                <div class="koll p-3 rounded border" on:keypress on:click={finishTask}> Finish task</div>
+            </div>
+        {:else}
+            
+            {#if task.worker==t.name}
+                <div class="col">
+                    <div class="koll p-1 rounded border">
+                        <h5 on:keypress on:click={claimTask}>Unclaim task</h5>
+                    </div>
+                </div>
+                <div class="col rounded ">
+                    <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Finish task</h5></div>
+                </div>
+            {:else if task.worker==""}
+                <div class="col">
+                    <div class="koll p-1 rounded border">
+                        <h5  on:keypress on:click={claimTask}>Claim task</h5>
+                    </div>
+                </div>
+            {:else}
+                <h5>Task Taken</h5>
+            {/if}
         {/if}
     </div>
     {:else}
-    <div class="row gx-3 justify-content-end">
-        {#if !$worker}
-        <div class="col">
+        <div class="row gx-3 justify-content-end">
+            {#if !$worker}
+            <div class="col">
+                
+                <DeleteTask task={task.id}></DeleteTask>
+                
+            </div>
+            <div class="col-5">
+                <div class="koll p-3 rounded border" on:keypress on:click={finishTask}>Open task</div>
+            </div>
+            {:else}
             
-            <DeleteTask task={task.id}></DeleteTask>
+                    {#if task.worker==t.name}
+                        <div class="col">
+                            <div class="koll p-1 rounded border">
+                                <h5 on:keypress on:click={claimTask}>Unclaim task</h5>
+                            </div>
+                        </div>
+                        <div class="col rounded ">
+                            <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Open task</h5></div>
+                        </div>
+                    {:else if task.worker==""}
+                            <div class="col">
+                                <div class="koll p-1 rounded border">
+                                    <h5  on:keypress on:click={claimTask}>Claim task</h5>
+                                </div>
+                            </div>
+                    {:else}
+                            <h5>Task Taken</h5>
+                    {/if}
+                    
+                
             
-        </div>
-        <div class="col-5">
-            <div class="koll p-3 rounded border" on:keypress on:click={finishTask}>Open task</div>
-        </div>
-        {:else}
-        <div class="col rounded ">
-            <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Open task</h5></div>
-        </div>
         {/if}
-
     </div>
     {/if}
-    <div class="row gx-3">
-        <div class="col">
-            <div class="koll p-2 rounded border fs-2">{task.title}</div>
+        <div class="row gx-3">
+            <div class="col">
+                <div class="koll p-2 rounded border fs-2">{task.title}</div>
+            </div>
         </div>
-    </div>
 
-    <div class="row gx-3">
-        <div class="col-7">
-            <div class="p-3 koll rounded border"><p>Deadline</p>{task.deadline}</div>
+        <div class="row gx-3">
+            <div class="col-7">
+                <div class="p-3 koll rounded border"><p>Deadline</p>{task.deadline}</div>
+            </div>
+            <div class="col-5">
+                <div class="p-2 koll rounded border"><p>Priority</p><Prio backgroundColor={color}></Prio></div>
+            </div>
         </div>
-        <div class="col-5">
-            <div class="p-2 koll rounded border"><p>Priority</p><Prio backgroundColor={color}></Prio></div>
+        <div class="row rounded">
+            <div class="col rounded ">
+                <div class="koll p-2 rounded border fs-4">Comments</div>
+                <div class="koll rounded"><CreateComment task={task.id}></CreateComment></div>
+            </div>
         </div>
+        <div class="row gx-3">
+            <div class="col">
+                {#each comments as comment}
+                    <div class="koll p-2 rounded border text-start">
+                        {#if comment.date}
+                        <p class="datum">{comment.date.date1} {comment.date.date2}</p>
+                        {/if}
+                        {comment.name}: {comment.comment}
+                    </div>
+                {/each}
+            </div>
+        </div> 
     </div>
-    <div class="row rounded">
-        <div class="col rounded ">
-            <div class="koll p-2 rounded border fs-4">Comments</div>
-            <div class="koll rounded"><CreateComment task={task.id}></CreateComment></div>
-        </div>
-    </div>
-    <div class="row gx-3">
-        <div class="col">
-            {#each comments as comment}
-                <div class="koll p-2 rounded border text-start">
-                    {#if comment.date}
-                    <p class="datum">{comment.date.date1} {comment.date.date2}</p>
-                    {/if}
-                    {comment.name}: {comment.comment}
-                </div>
-            {/each}
-        </div>
-    </div> 
-</div>
 {/if}
 
 <style>
