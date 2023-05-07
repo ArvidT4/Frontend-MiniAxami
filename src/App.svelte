@@ -18,6 +18,7 @@
   import Validate from "./lib/worker/Validate.svelte";
   import TaskInfo2 from "./lib/task/TaskInfo2.svelte";
   import EditUnit from "./lib/unit/EditUnit.svelte";
+  import Atob from "./lib/Atob.svelte";
   let routes = {
     "/": Home,
     "/registerUser": RegisterUser,
@@ -39,6 +40,7 @@
 </script>
 
 
+<Atob></Atob>
 <Router {routes}/>
 
 

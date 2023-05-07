@@ -5,11 +5,11 @@
     let t = JSON.parse(atob($token.split(".")[1]))
     let diff;
 
-    $: if($token!="expired"){
+    $: if($token!=""){
         setInterval(()=>{
             diff = t.exp*1000-Date.now()
             if(diff<0){
-                token.set("expired")
+                token.set("")
                 return push("/LoginUser")
             }
             else

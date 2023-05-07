@@ -1,5 +1,5 @@
 <script>
-    import { updateWorkRel } from "../store";
+    import { updateWorkRel,token } from "../store";
 
 
     
@@ -13,6 +13,7 @@
                 
                 method: 'POST',
                 headers:{
+                    "newtoken":$token,
                     "Content-Type":"application/json"
                 },
                 body: JSON.stringify({
@@ -31,7 +32,11 @@
             else if(json=="Relation already set"){
                 email = json
             }
+            else{
+                email = ""
+            }
             updateWorkRel.set(true);
+            
         }
         
     }
