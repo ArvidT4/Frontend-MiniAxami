@@ -36,8 +36,8 @@
         <label for="floatingInput">Full Name</label>
       </div>
       <div class="form-floating">
-        <input type="email" class="form-control text-dark" id="floatingInput" placeholder="Email" bind:value={email}>
-        <label for="floatingInput">Email address</label>
+        <input type="email" class="form-control text-dark" id="floatingInputEmail" placeholder="Email" bind:value={email}>
+        <label for="floatingInputEmail">Email address</label>
       </div>
       <div class="form-floating classen">
         <input type="password" class="form-control text-dark" id="floatingPassword" placeholder="Password" bind:value={password}>

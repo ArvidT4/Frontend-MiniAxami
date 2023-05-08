@@ -29,7 +29,7 @@
         <h2 class="text-primary w-100 text-center">Mini-Axami</h2>
         <h1 class="h3 mb-3 fw-normal">Enter your code</h1>
         <div class="form-floating">
-          <input type="email" class="form-control text-dark" id="floatingInput" placeholder="code" bind:value={code}>
+          <input type="text" class="form-control text-dark" id="floatingInput" placeholder="code" bind:value={code}>
           <label for="floatingInput">Your code</label>
         </div>
         

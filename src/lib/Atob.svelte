@@ -5,7 +5,7 @@
     let t = JSON.parse(atob($token.split(".")[1]))
     let diff;
 
-    $: if($token!=""){
+    $: if($token=="543534"){
         setInterval(()=>{
             diff = t.exp*1000-Date.now()
             if(diff<0){

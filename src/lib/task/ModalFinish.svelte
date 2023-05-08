@@ -1,34 +1,46 @@
 <script>
-	export let showModal;
+	export let showModalFinish;
 	export let task; // boolean
-	import {token} from "../store"
+	import {token,tasks, activeCount} from "../store"
 	let dialog, price, workerDeadline; // HTMLDialogElement
 	//$:console.log(task)
-	$: if (dialog && showModal) dialog.showModal();
+	$: if (dialog && showModalFinish) dialog.showModal();
+    let taken = false;
 
-	async function claimTask(){
-        let url = "https://mini-axami-server.arvpet0320.repl.co/updateWorker/"+task.id;
 
-        let response = await fetch(url,{
-            method:'PUT',
-            headers:{"newtoken":$token,
-            "Content-Type":"application/json"},
-            body: JSON.stringify({
-                "price":price,
-                "workerDeadline":workerDeadline
+    let t = JSON.parse(atob($token.split(".")[1]))
+    async function finishTask(){
+        if(t.name==task.worker){
+            let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
+
+            let response = await fetch(url,{
+                method: 'POST',
+                headers:{"newtoken":$token,
+                "Content-Type":"application/json"
+            },
+                body: JSON.stringify({
+                    "price":543,
+                    "workerDeadline":"54434"
+                })
             })
-        })
-        let json = await response.json()
-        //console.log(json)
-        task = json
+            let json = await response.json()
+            console.log(json)
+            activeCount.set(json.message.active);
+            console.log(task)
+        }
+        else{
+            taken = true;
+        }
+        
     }
+	
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <dialog
 	bind:this={dialog}
 	class="rounded border"
-	on:close={() => (showModal = false)}
+	on:close={() => (showModalFinish = false)}
 	on:click|self={() => dialog.close()}
 >
 	<div on:click|stopPropagation>
@@ -37,7 +49,7 @@
 			<div class="row">
 				<div class="col">
 					<h4 class="slotHeader">
-						Mark the task as your job
+						Finish the task
 					</h4>
 				</div>
 				<div class="col-2">
@@ -56,7 +68,7 @@
             </div>
             <div class="row ">
                 <div class="col buttonCol align-items-center">
-                    <button class="btn btn-primary" on:click={() => dialog.close()} on:click={claimTask}>Take the job</button>
+                    <button class="btn btn-primary" on:click={() => dialog.close()} on:click={finishTask}>Take the job</button>
                 </div>
             </div>
         </div>

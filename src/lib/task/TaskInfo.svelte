@@ -3,24 +3,25 @@
 
     export let params = {}
     import Navbar from "../Navbar.svelte";
-    import {tasks,token, worker} from "../store"
+    import {tasks,token, worker, activeCount} from "../store"
     import CreateComment from "./CreateComment.svelte";
     import Prio from "./Prio.svelte";
     import DeleteTask from "./DeleteTask.svelte";
     import Modal from "./Modal.svelte";
+    import ModalFinish from "./ModalFinish.svelte";
     let id = params.id
     let showModal = false;
+    let showModalFinish = false;
     //console.log($tasks)
     let task;
     let comments;
-    let activeCount;
     let color;
     let priority;
     tasks.subscribe(t=>{
         task = t.find(t=>t.id==id);
         if(!task) return;
         comments = JSON.parse(task.comment)
-        activeCount = task.active
+        activeCount.set(task.active) 
         priority = task.priority
     })
     let t = JSON.parse(atob($token.split(".")[1]))
@@ -36,8 +37,8 @@
             headers:{"newtoken":$token,
             "Content-Type":"application/json"},
             body: JSON.stringify({
-                "price":price,
-                "workerDeadline":workerDeadline
+                "price":task.price,
+                "workerDeadline":task.workerDeadline
             })
         })
         let json = await response.json()
@@ -52,11 +53,18 @@
             let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
 
             let response = await fetch(url,{
-                headers:{"newtoken":$token}
+                method: 'POST',
+                headers:{"newtoken":$token,
+                "Content-Type":"application/json"
+            },
+                body: JSON.stringify({
+                    "price":543,
+                    "workerDeadline":"54434"
+                })
             })
             let json = await response.json()
-            //console.log(json.message.active)
-            activeCount = json.message.active;
+            console.log(json)
+            activeCount.set(json.message.active);
             //console.log(activeCount)
         }
         else{
@@ -83,13 +91,14 @@
 
 
 <Modal bind:showModal bind:task>
-      
 </Modal>
-
+<ModalFinish bind:showModalFinish bind:task>
+      
+</ModalFinish>
 {#if task}
 <div class="container px-4 text-center">
     
-    {#if activeCount==1}
+    {#if $activeCount==true}
     <div class="row gx-3 justify-content-end ">
         {#if !$worker}
             <div class="col">
@@ -107,7 +116,7 @@
                     </div>
                 </div>
                 <div class="col rounded ">
-                    <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Finish task</h5></div>
+                    <div class="koll p-1 rounded border"on:keypress on:click={() => (showModalFinish = true)}><h5>Finish task</h5></div>
                 </div>
             {:else if task.worker==""}
                 <div class="col">
