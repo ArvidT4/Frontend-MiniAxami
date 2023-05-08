@@ -1,12 +1,15 @@
 <script>
+
+
     export let params = {}
     import Navbar from "../Navbar.svelte";
     import {tasks,token, worker} from "../store"
     import CreateComment from "./CreateComment.svelte";
     import Prio from "./Prio.svelte";
     import DeleteTask from "./DeleteTask.svelte";
+    import Modal from "./Modal.svelte";
     let id = params.id
-    
+    let showModal = false;
     //console.log($tasks)
     let task;
     let comments;
@@ -23,15 +26,22 @@
     let t = JSON.parse(atob($token.split(".")[1]))
     //console.log(t)
     //console.log(task)
+    let price;
+    let workerDeadline = (new Date()).toJSON().slice(0, 10);
     async function claimTask(){
         let url = "https://mini-axami-server.arvpet0320.repl.co/updateWorker/"+task.id;
 
         let response = await fetch(url,{
             method:'PUT',
-            headers:{"newtoken":$token}
+            headers:{"newtoken":$token,
+            "Content-Type":"application/json"},
+            body: JSON.stringify({
+                "price":price,
+                "workerDeadline":workerDeadline
+            })
         })
         let json = await response.json()
-        //console.log(json)
+        console.log(json)
         task = json
     }
     //$:console.log(task.worker)
@@ -70,6 +80,12 @@
     else color="red"
 </script>
 <Navbar></Navbar>
+
+
+<Modal bind:showModal bind:task>
+      
+</Modal>
+
 {#if task}
 <div class="container px-4 text-center">
     
@@ -96,7 +112,7 @@
             {:else if task.worker==""}
                 <div class="col">
                     <div class="koll p-1 rounded border">
-                        <h5  on:keypress on:click={claimTask}>Claim task</h5>
+                        <h5  on:keypress on:click={() => (showModal = true)}>Claim task</h5>
                     </div>
                 </div>
             {:else}
@@ -129,7 +145,7 @@
                     {:else if task.worker==""}
                             <div class="col">
                                 <div class="koll p-1 rounded border">
-                                    <h5  on:keypress on:click={claimTask}>Claim task</h5>
+                                    <h5  on:keypress on:click={() => (showModal = true)}>Claim task</h5>
                                 </div>
                             </div>
                     {:else}
@@ -155,6 +171,22 @@
                 <div class="p-2 koll rounded border"><p>Priority</p><Prio backgroundColor={color}></Prio></div>
             </div>
         </div>
+        {#if task.worker!=""}
+            <div class="row gx-3">
+                <div class="col-7">
+                    
+                    <div class="koll p-2 rounded border">
+                        <p>Worker's deadline</p>{task.workerDeadline}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="koll p-2 rounded border">
+                        <p>Workers price</p>
+                        {task.price} kr
+                    </div>
+                </div>
+            </div>
+        {/if}
         <div class="row rounded">
             <div class="col rounded ">
                 <div class="koll p-2 rounded border fs-4">Comments</div>
