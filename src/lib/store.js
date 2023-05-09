@@ -71,3 +71,16 @@ catch(err){}
 export const tokenExpired = writable(storedTokenExpired)
 
 tokenExpired.subscribe((value)=>localStorage.setItem("tokenExpired",JSON.stringify(value)))
+
+
+let storedWorkRels = [];
+try{
+    if(localStorage.getItem("workRel")){
+        storedWorkRels = JSON.parse(localStorage.getItem("workRel"));
+    }
+}
+catch(err){}
+
+export const workRel = writable(storedWorkRels)
+
+workRel.subscribe((value)=>localStorage.setItem("workRel", JSON.stringify(value)))

@@ -1,11 +1,14 @@
-skapa unit
+skapa unit //klar
 
-skapa ny task
-klarmarkera task
-skriva kommentarer
-token store
+skapa ny task //klar
+klarmarkera task //klar
+skriva kommentarer //klar
+token store //klar
 
 Arbetare kan ta sig bort från unit //klar 
 arbetare kunna markera "jag tar jobbet" //klar
 
 Kolla in tasks med active! //klar
+
+Fixa så att user kan lägga till worker på task, mail kvar
+Fixa så att worker säger nej till uppgift och skicka meddelande om varför 

@@ -3,16 +3,20 @@
 
     export let params = {}
     import Navbar from "../Navbar.svelte";
-    import {tasks,token, worker, activeCount} from "../store"
+    import {tasks,token, worker, activeCount, workRel} from "../store"
     import CreateComment from "./CreateComment.svelte";
     import Prio from "./Prio.svelte";
     import DeleteTask from "./DeleteTask.svelte";
     import Modal from "./Modals/Modal.svelte";
     import ModalFinish from "./Modals/ModalFinish.svelte";
+    import ModalGiveWork from "./Modals/ModalGiveWork.svelte";
     import { pop, push } from "svelte-spa-router";
+  import { each } from "svelte/internal";
+  import { comment } from "postcss";
     let id = params.id
     let showModal = false;
     let showModalFinish = false;
+    let showModalGiveWork = false;
     //console.log($tasks)
     let task;
     let comments;
@@ -75,6 +79,9 @@
         }
         
     }
+    let worker_name="";
+    $:console.log(worker_name)
+    
 
     if(priority==1){
         color="green"
@@ -102,6 +109,7 @@
 
 <Modal bind:showModal bind:task></Modal>
 <ModalFinish bind:showModalFinish bind:task></ModalFinish>
+<ModalGiveWork bind:showModalGiveWork bind:worker_name bind:task bind:id></ModalGiveWork>
 {#if task}
 <div class="container px-4 text-center">
 
@@ -195,10 +203,16 @@
     {/if}
         <div class="row gx-3">
             {#if task.worker!=""}
-        <div class="col">
-            <div class="koll p-2 rounded workerTitle border">Worker: {task.worker}</div>
-        </div>
-        {/if}
+                <div class="col">
+                    <div class="koll p-2 rounded workerTitle border">Worker: {task.worker}</div>
+                </div>
+            {:else}
+                <div class="col">
+                    <div class="koll p-2 rounded border">Add worker
+                        <button class="btn btn-primary" on:click={() => (showModalGiveWork = true)}><i class="bi bi-plus-square"></i></button>
+                    </div>
+                </div>
+            {/if}
             
         </div>
 

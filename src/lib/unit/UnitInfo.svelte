@@ -1,7 +1,7 @@
 <script>
     import { push,pop } from "svelte-spa-router";
 import Navbar from "../Navbar.svelte";
-import {units,token,tasks,worker, updateWorkRel} from "../store"
+import {units,token,tasks,worker, updateWorkRel, workRel} from "../store"
 import Task from "../task/Task.svelte";
 import GiveWork from "../worker/GiveWork.svelte";
     import EditUnit from "./EditUnit.svelte";
@@ -13,7 +13,6 @@ let id = params.id
     
     // hitta en unit med rätt id.
     let unit = $units.find(u=>u.id==id);
-    let workRel = []
     getWorkRel()
     $:if($updateWorkRel==true){
         getWorkRel()
@@ -27,7 +26,7 @@ let id = params.id
             headers:{"newtoken":$token}
         })
         let json = await response.json()
-        workRel = json
+        workRel.set(json)
     }
     getTasks()
     async function getTasks(){
@@ -136,11 +135,11 @@ async function deleteWorkRel(){
                         <form class="d-flex" role="search">
                             <GiveWork unit_id={id}></GiveWork>
                         </form>
-                        {#if workRel.length !=0}
+                        {#if $workRel.length !=0}
                             <li>
                                 <h5>Alla arbetare kopplade</h5>
                                 
-                                    {#each workRel as user}
+                                    {#each $workRel as user}
                                     <p>{user.name} : {user.email}</p>
                                     {/each}
                             
