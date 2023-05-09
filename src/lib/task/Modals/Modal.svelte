@@ -1,8 +1,11 @@
 <script>
+// @ts-nocheck
+
 	export let showModal;
-	export let task; // boolean
-	import {token} from "../store"
-	let dialog, price, workerDeadline; // HTMLDialogElement
+	export let task; 
+	import {token} from "../../store"
+	let dialog, price=0;
+	let workerDeadline = (new Date()).toJSON().slice(0, 10);
 	//$:console.log(task)
 	$: if (dialog && showModal) dialog.showModal();
 
@@ -41,6 +44,7 @@
 					</h4>
 				</div>
 				<div class="col-2">
+					<!-- svelte-ignore a11y-autofocus -->
 					<button class="btn btn-primary align-items-end" autofocus on:click={() => dialog.close()}><i class="bi bi-x-square"></i></button>
 				</div>
 			</div>

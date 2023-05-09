@@ -16,8 +16,8 @@
   import RegisterWorker from "./lib/worker/RegisterWorker.svelte";
   import LoginWorker from "./lib/worker/LoginWorker.svelte";
   import Validate from "./lib/worker/Validate.svelte";
-  import TaskInfo2 from "./lib/task/TaskInfo2.svelte";
   import EditUnit from "./lib/unit/EditUnit.svelte";
+  import EditTask from "./lib/task/EditTask.svelte";
   let routes = {
     "/": Home,
     "/registerUser": RegisterUser,
@@ -31,8 +31,8 @@
     "/RegisterWorker": RegisterWorker,
     "/LoginWorker": LoginWorker,
     "/ValidateCode": Validate,
-    "/TaskInfo2": TaskInfo2,
     "/UnitInfo/:id/EditUnit/": EditUnit,
+    "/TaskInfo/:id/EditTask/:title": EditTask,
 
     "*": NotFound
   }

@@ -6,17 +6,8 @@
     let count = 0;
     let info = ""
     let t = JSON.parse(atob($token.split(".")[1]))
-    function test(){
-        
-        if(count==1){
-            count-=1
-        }
-        else
-            count+=1
-            
-
-        console.log(count)
-    }
+    
+    //$:console.log(task)
     function onClicked(){
         push("/TaskInfo/"+task.id)
     }
@@ -32,13 +23,13 @@
     {:else if task.worker==""}
         {#if task.active==1}
             <div class="card-body fs-5 active bg-success-subtle" on:keypress on:click={onClicked}>{task.title}</div>
-        {:else if task.worker==""}
+        {:else if task.active==0}
             <div class="card-body fs-5 notActive bg-success-subtle" on:keypress on:click={onClicked}>{task.title}</div>
         {/if}
     {:else}
         {#if task.active==1}
             <div class="card-body fs-5 active bg-danger-subtle" on:keypress on:click={onClicked}>{task.title}</div>
-        {:else if task.worker==""}
+        {:else if task.active==0}
             <div class="card-body fs-5 notActive bg-danger-subtle" on:keypress on:click={onClicked}>{task.title}</div>
         {/if}
     {/if}

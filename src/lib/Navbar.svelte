@@ -31,14 +31,14 @@
       </div>
     </div>
   </nav>
-  <button on:click={goBack} class="btn btn-light back">back</button>
+  <!-- <button on:click={goBack} class="btn btn-light back">back</button> -->
 
 
 <style>
-  .back{
+  /* .back{
     margin: 10px;
 margin-bottom: -20px;
-  }
+  } */
   a{
     text-decoration: none;
   }

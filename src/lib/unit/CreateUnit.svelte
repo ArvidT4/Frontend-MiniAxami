@@ -32,6 +32,9 @@ import {units, token, worker} from "../store"
        push("/unitInfo/"+json.id)
 
     }
+    function back(){
+        push("/units")
+    }
     //$:console.log(deadline)
     
     
@@ -39,6 +42,11 @@ import {units, token, worker} from "../store"
  <Navbar></Navbar>
  
 <main>
+    <div class="row gx-3 text-start">
+        <div class="col">
+            <button class="btn backBtn btn-light" on:click={back}>Back</button>
+        </div>
+    </div>
     <div class="card" id="wrap">
         <div class="card-header text-center">
             <h2 class="text-center title ">Create your unit</h2>
@@ -58,6 +66,11 @@ import {units, token, worker} from "../store"
 
 
  <style>
+    .backBtn{
+        margin: auto 5px;
+        margin-top: -15px;
+        margin-bottom: 10px;
+    }
    main{
         max-width: 350px;
         margin: auto;

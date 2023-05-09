@@ -1,6 +1,5 @@
 <script>
     import { tasks,token, dateYear, dateHour } from "../store";
-    import TaskInfo from "./TaskInfo2.svelte";
     export let task
 
     let now = new Date(),

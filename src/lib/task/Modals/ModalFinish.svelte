@@ -1,32 +1,36 @@
 <script>
+	// @ts-nocheck
 	export let showModalFinish;
-	export let task; // boolean
-	import {token,tasks, activeCount} from "../store"
-	let dialog, price, workerDeadline; // HTMLDialogElement
+	export let task;
+	import {token, activeCount} from "../../store"
+	let dialog, price; 
+	let workerDeadline = (new Date()).toJSON().slice(0, 10);
 	//$:console.log(task)
 	$: if (dialog && showModalFinish) dialog.showModal();
     let taken = false;
 
-
     let t = JSON.parse(atob($token.split(".")[1]))
     async function finishTask(){
         if(t.name==task.worker){
-            let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
+				let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
 
-            let response = await fetch(url,{
-                method: 'POST',
-                headers:{"newtoken":$token,
-                "Content-Type":"application/json"
-            },
-                body: JSON.stringify({
-                    "price":543,
-                    "workerDeadline":"54434"
-                })
-            })
-            let json = await response.json()
-            console.log(json)
-            activeCount.set(json.message.active);
-            console.log(task)
+				let response = await fetch(url,{
+					method: 'POST',
+					headers:{"newtoken":$token,
+					"Content-Type":"application/json"
+				},
+					body: JSON.stringify({
+						"price":price,
+						"workerDeadline":workerDeadline
+					})
+				})
+				let json = await response.json()
+				task = json;
+				activeCount.set(task.active);
+				//console.log("JSON",json)
+				//console.log("TASK",task)
+			
+			
         }
         else{
             taken = true;
@@ -45,7 +49,7 @@
 >
 	<div on:click|stopPropagation>
 		
-        <div class="container-md text-center">
+        <div class="container-md">
 			<div class="row">
 				<div class="col">
 					<h4 class="slotHeader">
@@ -53,10 +57,11 @@
 					</h4>
 				</div>
 				<div class="col-2">
+					<!-- svelte-ignore a11y-autofocus -->
 					<button class="btn btn-primary align-items-end" autofocus on:click={() => dialog.close()}><i class="bi bi-x-square"></i></button>
 				</div>
 			</div>
-            <div class="row">
+            <div class="row text-center">
                 <div class="col">
                     <h5>price in kr</h5>
                     <input class="form-floating" type="number" bind:value={price}>
@@ -66,8 +71,8 @@
                     <input type="date" value={workerDeadline} on:input={e => workerDeadline = e.target.value || workerDeadline}/>
                 </div>
             </div>
-            <div class="row ">
-                <div class="col buttonCol align-items-center">
+            <div class="row">
+                <div class="col buttonCol">
                     <button class="btn btn-primary" on:click={() => dialog.close()} on:click={finishTask}>Take the job</button>
                 </div>
             </div>
@@ -75,12 +80,13 @@
 	</div>
 </dialog>
 <style>
-	
     .slotHeader{
         margin-bottom: 0px;
     }
     .buttonCol{
+		
         margin-top: 20px;
+
     }
 	dialog {
 		max-width: 90%;

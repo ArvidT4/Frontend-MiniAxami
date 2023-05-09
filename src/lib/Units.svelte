@@ -2,9 +2,7 @@
     import Unit from "./unit/Unit.svelte";
     import {units, token, worker} from "./store"
     import Navbar from "./Navbar.svelte";
-    import {push} from "svelte-spa-router"
-    import Atob from "./Atob.svelte";
-    
+
     
     let url;
     let load = false;
@@ -29,7 +27,6 @@
 
 
 </script>
-<Atob></Atob>
 <Navbar></Navbar>
 <h2>YOUR UNITS</h2>
  

@@ -6,7 +6,7 @@
     import Navbar from "../Navbar.svelte"
     import {tasks, token} from "../store"
 
-    let priority,title;
+    let priority,title="";
     let id = params.id
     let deadline = (new Date()).toJSON().slice(0, 10);
     $: console.log(deadline)
@@ -15,31 +15,43 @@
         
         let url = "https://mini-axami-server.arvpet0320.repl.co/createTask";
 
-        let response = await fetch(url,{
+        if(title!=""&&title!="You must name your task" ){
+            let response = await fetch(url,{
             
-            method: 'POST',
-            headers:{
-                "newtoken": $token,
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({
-                "unit_id":id,
-                "title":title,
-                "priority":priority,
-                "deadline":deadline
+                method: 'POST',
+                headers:{
+                    "newtoken": $token,
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    "unit_id":id,
+                    "title":title,
+                    "priority":priority,
+                    "deadline":deadline
+                })
             })
-        })
-        const json = await response.json()
-
-        tasks.update(old=>[...old,json])
-        push("/UnitInfo/"+id)
-        console.log(json)
+            const json = await response.json()
+             
+            tasks.update(old=>[...old,json])
+            push("/UnitInfo/"+id)
+            console.log(json)
+        }
+        else title="You must name your task"   
         
+        
+    }
+    function back(){
+        push("/Unitinfo/"+id)
     }
 </script>
 <Navbar></Navbar>
-
+<div class="row gx-3 text-start">
+    <div class="col">
+        <button class="btn backBtn btn-light" on:click={back}>Back</button>
+    </div>
+</div>
 <div class="container bg-white rounded">
+    
     <div class="row">
         <div class="col text-center"><h1>Add task</h1></div>
     </div>
@@ -75,8 +87,12 @@
 </div>
     
 <style>
+    .backBtn{
+        margin: auto 5px;
+        margin-top: 10px;
+    }
     .container{
-        margin-top: 40px;
+        margin-top: 0px;
         max-width: 350px;
         padding: 10px;
         border: 1px solid black;

@@ -6,4 +6,6 @@ skriva kommentarer
 token store
 
 Arbetare kan ta sig bort från unit //klar 
-arbetare kunna markera "jag tar jobbet"
+arbetare kunna markera "jag tar jobbet" //klar
+
+Kolla in tasks med active! //klar

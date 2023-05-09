@@ -1,34 +1,16 @@
 <script>
-    import { pop } from "svelte-spa-router";
-    import {tasks} from "../store"
+    import ModalDelete from "./Modals/ModalDelete.svelte";
+	let showModalDelete = false;
+    export let task;
 
-
-export let task;
-async function deleteTask(){
-    let response = await fetch('https://mini-axami-server.arvpet0320.repl.co/deleteTask/' + task, {
-        method:'DELETE'
-    }) 
-    let json = await response.json()
-    console.log(json)
-
-    if(json.error){return}
- /*    let filteredTasks = $tasks.filter(t=>t.id!=task)
-    console.log(filteredTasks)
-    tasks.set(filteredTasks)
-    
-    console.log(tasks) */
-
-    tasks.update(old => old.filter(t=>t.id!=task));
-
-    console.log(task)
-    pop();
-}
 
 
 </script>
-
-<!-- {JSON.stringify($tasks)} -->
-<div class="bg-white rounded border" on:keypress on:click={deleteTask}><i class="bi bi-trash"></i></div>
+<ModalDelete
+bind:showModalDelete
+bind:task>
+</ModalDelete>
+<div class="bg-white rounded border" on:keypress on:click={() => (showModalDelete = true)}><i class="bi bi-trash"></i></div>
 
 <style>
     .bi{

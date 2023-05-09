@@ -7,8 +7,9 @@
     import CreateComment from "./CreateComment.svelte";
     import Prio from "./Prio.svelte";
     import DeleteTask from "./DeleteTask.svelte";
-    import Modal from "./Modal.svelte";
-    import ModalFinish from "./ModalFinish.svelte";
+    import Modal from "./Modals/Modal.svelte";
+    import ModalFinish from "./Modals/ModalFinish.svelte";
+    import { pop, push } from "svelte-spa-router";
     let id = params.id
     let showModal = false;
     let showModalFinish = false;
@@ -25,8 +26,8 @@
         priority = task.priority
     })
     let t = JSON.parse(atob($token.split(".")[1]))
-    //console.log(t)
-    //console.log(task)
+    $:console.log(t)
+    console.log(task)
     let price;
     let workerDeadline = (new Date()).toJSON().slice(0, 10);
     async function claimTask(){
@@ -42,14 +43,14 @@
             })
         })
         let json = await response.json()
-        console.log(json)
+        //console.log(json)
         task = json
     }
     //$:console.log(task.worker)
     //console.log(task)
     let taken = false;
     async function finishTask(){
-        if(t.name==task.worker){
+        if(t.name==task.worker||!$worker){
             let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
 
             let response = await fetch(url,{
@@ -58,13 +59,15 @@
                 "Content-Type":"application/json"
             },
                 body: JSON.stringify({
-                    "price":543,
-                    "workerDeadline":"54434"
+                    "price":1000,
+                    "workerDeadline":"not worker"
                 })
             })
             let json = await response.json()
-            console.log(json)
-            activeCount.set(json.message.active);
+            task = json
+            console.log(task)
+
+            activeCount.set(task.active);
             //console.log(activeCount)
         }
         else{
@@ -86,21 +89,38 @@
         color="orange"
     }
     else color="red"
+
+    function back(){
+        pop()
+    }
+    function editTask(){
+        push("/TaskInfo/"+id+"/EditTask/"+task.title)
+    }
 </script>
 <Navbar></Navbar>
 
 
-<Modal bind:showModal bind:task>
-</Modal>
-<ModalFinish bind:showModalFinish bind:task>
-      
-</ModalFinish>
+<Modal bind:showModal bind:task></Modal>
+<ModalFinish bind:showModalFinish bind:task></ModalFinish>
 {#if task}
 <div class="container px-4 text-center">
-    
+
+    <div class="row gx-3">
+        <div class="col-3">
+            <div class="koll p-2  backBtn rounded border fs-2" on:keypress on:click={back}><i class="bi bi-arrow-left"></i></div>
+        </div>
+        <div class="col-9">
+            <div class="koll p-2 rounded border fs-2">{task.title}</div>
+        </div>
+    </div>
+
+   
     {#if $activeCount==true}
     <div class="row gx-3 justify-content-end ">
         {#if !$worker}
+            <div class="col">
+                <div class="p-1 koll edit rounded border" on:keypress on:click={editTask}><i class="bi bi-pencil-square"></i></div>
+            </div>
             <div class="col">
                 <DeleteTask task={task.id}></DeleteTask>
             </div>
@@ -133,6 +153,9 @@
         <div class="row gx-3 justify-content-end">
             {#if !$worker}
             <div class="col">
+                <div class="p-1 koll edit rounded border" on:keypress on:click={editTask}><i class="bi bi-pencil-square"></i></div>
+            </div>
+            <div class="col">
                 
                 <DeleteTask task={task.id}></DeleteTask>
                 
@@ -158,7 +181,11 @@
                                 </div>
                             </div>
                     {:else}
+                    <div class="col">
+                        <div class="koll p-1 rounded border">
                             <h5>Task Taken</h5>
+                        </div>
+                    </div>
                     {/if}
                     
                 
@@ -167,9 +194,12 @@
     </div>
     {/if}
         <div class="row gx-3">
-            <div class="col">
-                <div class="koll p-2 rounded border fs-2">{task.title}</div>
-            </div>
+            {#if task.worker!=""}
+        <div class="col">
+            <div class="koll p-2 rounded workerTitle border">Worker: {task.worker}</div>
+        </div>
+        {/if}
+            
         </div>
 
         <div class="row gx-3">
@@ -218,6 +248,15 @@
 {/if}
 
 <style>
+    .edit{
+        height: 56px;
+    }
+    .bi-pencil-square{
+        font-size: 30px;
+    }
+    .workerTitle{
+        font-size: 18px;
+    }
    
     .koll{
         /* border: 1px solid black; */

@@ -1,7 +1,7 @@
 <script> 
     import {units, token} from "../store"
     import Navbar from "../Navbar.svelte";
-    import { pop } from "svelte-spa-router";
+    import { pop,push } from "svelte-spa-router";
     export let params = {}
     let id = params.id
     let name, adress,description;
@@ -33,12 +33,19 @@
        pop()
 
     }
-    
+    function back(){
+        push("/Unitinfo/"+id)
+    }
 
 </script>
 <Navbar></Navbar>
  
 <main>
+    <div class="row gx-3 text-start">
+        <div class="col">
+            <button class="btn backBtn btn-light" on:click={back}>Back</button>
+        </div>
+    </div>
     <div class="card" id="wrap">
         <div class="card-header text-center">
             <h2 class="text-center title ">Edit unit</h2>
@@ -58,7 +65,12 @@
 
 
  <style>
-   main{
+    .backBtn{
+        margin: auto 5px;
+        margin-top: -15px;
+        margin-bottom: 10px;
+    }
+    main{
         max-width: 350px;
         margin: auto;
         position: relative;

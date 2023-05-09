@@ -39,6 +39,7 @@ let id = params.id
         })
         let data = await response.json()
         tasks.set(data);
+        
 
     }
     const createTask = () =>{
@@ -91,10 +92,18 @@ async function deleteWorkRel(){
     function editUnit(){
         push("/UnitInfo/"+unit.id+"/EditUnit/")
     }
+    function back(){
+        push("/units")
+    }
 
 </script>
 <Navbar></Navbar>
 <main>
+    <div class="row gx-3 text-start">
+        <div class="col">
+            <button class="btn backBtn btn-light" on:click={back}>Back</button>
+        </div>
+    </div>
     <div class="card" id="wrap">
         <div class="card-header">
             <nav class="navbar navbar bg-body-tertiary">
@@ -184,6 +193,11 @@ async function deleteWorkRel(){
 </main>
 
 <style>
+    .backBtn{
+        margin: auto 5px;
+        margin-top: -15px;
+        margin-bottom: 10px;
+    }
     .addWorker{
         margin-top: 15px;
         margin-bottom: 0px;
