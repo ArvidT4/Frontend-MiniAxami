@@ -20,7 +20,6 @@
           const json = await response.json()
           //console.log(json)
           token.set(json.token)
-          worker.set(true)
           push("/ValidateCode")
           //console.log($token)
       }

@@ -7,7 +7,6 @@ import {writable} from "svelte/store"
 
 export const dateYear = writable("")
 export const dateHour = writable("")
-export const updateWorkRel = writable(false)
 export const activeCount = writable(false)
 
 const storedToken = localStorage.getItem("token"); 
@@ -56,7 +55,7 @@ catch(err){}
 
 export const worker = writable(storedWorker)
 
-worker.subscribe((value)=>localStorage.setItem("worker",JSON.stringify(value)))
+worker.subscribe((value)=>localStorage.setItem("worker",JSON.parse(value)))
 
 
 

@@ -34,6 +34,7 @@
 <input type="password" bind:value={password}> -->
 
 <main class="form-signin w-100 m-auto">
+    <div><a href="/#/loginworker">Worker? press here.</a></div>
     <form>
       <h2 class="text-primary w-100 text-center">Mini-Axami</h2>
       <h1 class="h3 mb-3 fw-normal">Please sign in</h1>

@@ -11,8 +11,7 @@
     import ModalFinish from "./Modals/ModalFinish.svelte";
     import ModalGiveWork from "./Modals/ModalGiveWork.svelte";
     import { pop, push } from "svelte-spa-router";
-  import { each } from "svelte/internal";
-  import { comment } from "postcss";
+
     let id = params.id
     let showModal = false;
     let showModalFinish = false;
@@ -30,8 +29,8 @@
         priority = task.priority
     })
     let t = JSON.parse(atob($token.split(".")[1]))
-    $:console.log(t)
-    console.log(task)
+    //$:console.log(t)
+    //console.log(task)
     let price;
     let workerDeadline = (new Date()).toJSON().slice(0, 10);
     async function claimTask(){
@@ -47,6 +46,10 @@
             })
         })
         let json = await response.json()
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
         //console.log(json)
         task = json
     }
@@ -68,6 +71,10 @@
                 })
             })
             let json = await response.json()
+            if(json.mes=="jwt expired"){
+                localStorage.clear()
+                return push("/loginuser")
+        }
             task = json
             console.log(task)
 
@@ -79,8 +86,8 @@
         }
         
     }
-    let worker_name="";
-    $:console.log(worker_name)
+    let worker_email="";
+    $:console.log(worker_email)
     
 
     if(priority==1){
@@ -98,10 +105,10 @@
     else color="red"
 
     function back(){
-        pop()
+        push("/UnitInfo/"+task.unit_id)
     }
     function editTask(){
-        push("/TaskInfo/"+id+"/EditTask/"+task.title)
+        push("/UnitInfo/"+task.unit_id+"/TaskInfo/"+id+"/EditTask/"+task.title)
     }
 </script>
 <Navbar></Navbar>
@@ -109,13 +116,13 @@
 
 <Modal bind:showModal bind:task></Modal>
 <ModalFinish bind:showModalFinish bind:task></ModalFinish>
-<ModalGiveWork bind:showModalGiveWork bind:worker_name bind:task bind:id></ModalGiveWork>
+<ModalGiveWork bind:showModalGiveWork bind:worker_email bind:task bind:id></ModalGiveWork>
 {#if task}
 <div class="container px-4 text-center">
 
     <div class="row gx-3">
         <div class="col-3">
-            <div class="koll p-2  backBtn rounded border fs-2" on:keypress on:click={back}><i class="bi bi-arrow-left"></i></div>
+            <div class="koll p-2 hoverEffect backBtn rounded border fs-2" on:keypress on:click={back}><i class="bi bi-arrow-left"></i></div>
         </div>
         <div class="col-9">
             <div class="koll p-2 rounded border fs-2">{task.title}</div>
@@ -127,7 +134,7 @@
     <div class="row gx-3 justify-content-end ">
         {#if !$worker}
             <div class="col">
-                <div class="p-1 koll edit rounded border" on:keypress on:click={editTask}><i class="bi bi-pencil-square"></i></div>
+                <div class="p-1 koll hoverEffect edit rounded border" on:keypress on:click={editTask}><i class="bi bi-pencil-square"></i></div>
             </div>
             <div class="col">
                 <DeleteTask task={task.id}></DeleteTask>
@@ -139,21 +146,25 @@
             
             {#if task.worker==t.name}
                 <div class="col">
-                    <div class="koll p-1 rounded border">
+                    <div class="koll hoverEffect p-1 rounded border">
                         <h5 on:keypress on:click={claimTask}>Unclaim task</h5>
                     </div>
                 </div>
                 <div class="col rounded ">
-                    <div class="koll p-1 rounded border"on:keypress on:click={() => (showModalFinish = true)}><h5>Finish task</h5></div>
+                    <div class="koll hoverEffect p-1 rounded border"on:keypress on:click={() => (showModalFinish = true)}><h5>Finish task</h5></div>
                 </div>
             {:else if task.worker==""}
                 <div class="col">
-                    <div class="koll p-1 rounded border">
+                    <div class="koll hoverEffect p-1 rounded border">
                         <h5  on:keypress on:click={() => (showModal = true)}>Claim task</h5>
                     </div>
                 </div>
             {:else}
-                <h5>Task Taken</h5>
+            <div class="col">
+                <div class="koll p-1 rounded border">
+                    <h5>Task Taken</h5>
+                </div>
+            </div>
             {/if}
         {/if}
     </div>
@@ -161,7 +172,7 @@
         <div class="row gx-3 justify-content-end">
             {#if !$worker}
             <div class="col">
-                <div class="p-1 koll edit rounded border" on:keypress on:click={editTask}><i class="bi bi-pencil-square"></i></div>
+                <div class="p-1 koll edit hoverEffect rounded border" on:keypress on:click={editTask}><i class="bi bi-pencil-square"></i></div>
             </div>
             <div class="col">
                 
@@ -169,22 +180,22 @@
                 
             </div>
             <div class="col-5">
-                <div class="koll p-3 rounded border" on:keypress on:click={finishTask}>Open task</div>
+                <div class="koll p-3 rounded hoverEffect border" on:keypress on:click={finishTask}>Open task</div>
             </div>
             {:else}
             
                     {#if task.worker==t.name}
                         <div class="col">
-                            <div class="koll p-1 rounded border">
+                            <div class="koll hoverEffect p-1 rounded border">
                                 <h5 on:keypress on:click={claimTask}>Unclaim task</h5>
                             </div>
                         </div>
                         <div class="col rounded ">
-                            <div class="koll p-1 rounded border" on:keypress on:click={finishTask}><h5>Open task</h5></div>
+                            <div class="koll p-1 hoverEffect rounded border" on:keypress on:click={finishTask}><h5>Open task</h5></div>
                         </div>
                     {:else if task.worker==""}
                             <div class="col">
-                                <div class="koll p-1 rounded border">
+                                <div class="koll p-1 hoverEffect rounded border">
                                     <h5  on:keypress on:click={() => (showModal = true)}>Claim task</h5>
                                 </div>
                             </div>
@@ -207,11 +218,14 @@
                     <div class="koll p-2 rounded workerTitle border">Worker: {task.worker}</div>
                 </div>
             {:else}
-                <div class="col">
-                    <div class="koll p-2 rounded border">Add worker
-                        <button class="btn btn-primary" on:click={() => (showModalGiveWork = true)}><i class="bi bi-plus-square"></i></button>
+                {#if !$worker}
+                    <div class="col">
+                        <div class="koll p-2 addWorker rounded border text-center">
+                            Add worker
+                            <div class="btn addWorkerBtn btn-primary" on:keypress on:click={() => (showModalGiveWork = true)}><i class="bi bi-plus-square"></i></div>
+                        </div>
                     </div>
-                </div>
+                {/if}
             {/if}
             
         </div>
@@ -243,7 +257,7 @@
         <div class="row rounded">
             <div class="col rounded ">
                 <div class="koll p-2 rounded border fs-4">Comments</div>
-                <div class="koll rounded"><CreateComment task={task.id}></CreateComment></div>
+                <div class="koll rounded"><CreateComment task={task}></CreateComment></div>
             </div>
         </div>
         <div class="row gx-3">
@@ -262,6 +276,13 @@
 {/if}
 
 <style>
+    .addWorker{
+        font-size: 23px;
+    }
+    .addWorkerBtn{
+        margin: 0px;
+        width: 80px;
+    }
     .edit{
         height: 56px;
     }
@@ -285,5 +306,11 @@
     }
     .container{
         margin-top: 50px;
+    }
+    .hoverEffect{
+        transition: 0.5s;
+    }
+    .hoverEffect:hover{
+        box-shadow: 0px 0px 3px -1px;
     }
 </style>

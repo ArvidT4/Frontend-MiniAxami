@@ -29,13 +29,17 @@
             })
         })
         const json = await response.json()
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
         tasks.set(json)
         pop()
         
 
     }
     function back(){
-        push("/TaskInfo/"+id)
+        pop()
     }
 
 </script>

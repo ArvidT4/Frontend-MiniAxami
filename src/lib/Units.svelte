@@ -2,6 +2,7 @@
     import Unit from "./unit/Unit.svelte";
     import {units, token, worker} from "./store"
     import Navbar from "./Navbar.svelte";
+    import { push } from "svelte-spa-router";
 
     
     let url;
@@ -21,6 +22,11 @@
             headers:{"newtoken":$token}
         })
         let json = await response.json()
+        //console.log(json)
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
         units.set(json)
         load = true;
     }

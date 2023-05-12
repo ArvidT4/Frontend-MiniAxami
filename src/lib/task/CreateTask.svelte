@@ -9,8 +9,8 @@
     let priority,title="";
     let id = params.id
     let deadline = (new Date()).toJSON().slice(0, 10);
-    $: console.log(deadline)
-    $: console.log(priority)
+    //$: console.log(deadline)
+    //$: console.log(priority)
     async function addTask(){
         
         let url = "https://mini-axami-server.arvpet0320.repl.co/createTask";
@@ -31,10 +31,13 @@
                 })
             })
             const json = await response.json()
-             
+            if(json.mes=="jwt expired"){
+                localStorage.clear()
+            return push("/loginuser")
+        }
             tasks.update(old=>[...old,json])
             push("/UnitInfo/"+id)
-            console.log(json)
+            //console.log(json)
         }
         else title="You must name your task"   
         

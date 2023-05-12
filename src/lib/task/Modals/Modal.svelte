@@ -3,6 +3,7 @@
 
 	export let showModal;
 	export let task; 
+	import {push} from "svelte-spa-router"
 	import {token} from "../../store"
 	let dialog, price=0;
 	let workerDeadline = (new Date()).toJSON().slice(0, 10);
@@ -22,6 +23,10 @@
             })
         })
         let json = await response.json()
+		if(json.mes=="jwt expired"){
+			localStorage.clear()
+            return push("/loginuser")
+        }
         //console.log(json)
         task = json
     }

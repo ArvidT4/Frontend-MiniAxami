@@ -2,6 +2,7 @@
 	// @ts-nocheck
 	export let showModalFinish;
 	export let task;
+	import {push} from "svelte-spa-router"
 	import {token, activeCount} from "../../store"
 	let dialog, price; 
 	let workerDeadline = (new Date()).toJSON().slice(0, 10);
@@ -25,6 +26,10 @@
 					})
 				})
 				let json = await response.json()
+				if(json.mes=="jwt expired"){
+					localStorage.clear()
+					return push("/loginuser")
+				}
 				task = json;
 				activeCount.set(task.active);
 				//console.log("JSON",json)
@@ -73,7 +78,7 @@
             </div>
             <div class="row">
                 <div class="col buttonCol">
-                    <button class="btn btn-primary" on:click={() => dialog.close()} on:click={finishTask}>Take the job</button>
+                    <button class="btn btn-primary" on:click={() => dialog.close()} on:click={finishTask}>Finish the job</button>
                 </div>
             </div>
         </div>

@@ -25,14 +25,14 @@
     "/CreateUnit": CreateUnit,
     "/Units": Units,
     "/UnitInfo/:id": UnitInfo,
-    "/TaskInfo/:id":TaskInfo,
+    "/UnitInfo/:unit_id/TaskInfo/:id":TaskInfo,
     "/Logout":Logout,
     "/createTask/:id": CreateTask,
     "/RegisterWorker": RegisterWorker,
     "/LoginWorker": LoginWorker,
     "/ValidateCode": Validate,
     "/UnitInfo/:id/EditUnit/": EditUnit,
-    "/TaskInfo/:id/EditTask/:title": EditTask,
+    "/UnitInfo/:unit_id/TaskInfo/:id/EditTask/:title": EditTask,
 
     "*": NotFound
   }

@@ -1,6 +1,6 @@
 <script>
     import {push} from "svelte-spa-router"
-    import { token } from "../store";
+    import { token, worker } from "../store";
       let code;
       $: localStorage.clear()
       async function registerWorker(){
@@ -19,6 +19,7 @@
           })
           const json = await response.json()
           //console.log(json)
+          worker.set(true)
           token.set(json.newToken)
           push("/Units")
       }

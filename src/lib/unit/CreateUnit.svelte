@@ -28,6 +28,10 @@ import {units, token, worker} from "../store"
             })
         })
         const json = await response.json()
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
        units.update(old => [...old,json])
        push("/unitInfo/"+json.id)
 

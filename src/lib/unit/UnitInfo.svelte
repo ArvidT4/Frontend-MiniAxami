@@ -1,7 +1,7 @@
 <script>
     import { push,pop } from "svelte-spa-router";
 import Navbar from "../Navbar.svelte";
-import {units,token,tasks,worker, updateWorkRel, workRel} from "../store"
+import {units,token,tasks,worker, workRel} from "../store"
 import Task from "../task/Task.svelte";
 import GiveWork from "../worker/GiveWork.svelte";
     import EditUnit from "./EditUnit.svelte";
@@ -14,10 +14,7 @@ let id = params.id
     // hitta en unit med rätt id.
     let unit = $units.find(u=>u.id==id);
     getWorkRel()
-    $:if($updateWorkRel==true){
-        getWorkRel()
-        updateWorkRel.set(false);
-    }
+    
     async function getWorkRel(){
 
         let url = "https://mini-axami-server.arvpet0320.repl.co/workRel/"+id;
@@ -26,6 +23,11 @@ let id = params.id
             headers:{"newtoken":$token}
         })
         let json = await response.json()
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
+        //console.log(json)
         workRel.set(json)
     }
     getTasks()
@@ -37,6 +39,10 @@ let id = params.id
             headers:{"newtoken":$token}
         })
         let data = await response.json()
+        if(data.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
         tasks.set(data);
         
 
@@ -60,10 +66,13 @@ let id = params.id
         //console.log(json)
 
         if(json.error){return}
-        
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
         units.update(old => old.filter(u=>u.id!=unit.id));
 
-        pop();
+        push("/units");
 }
 let t = JSON.parse(atob($token.split(".")[1]))
 async function deleteWorkRel(){
@@ -82,10 +91,13 @@ async function deleteWorkRel(){
         console.log(json)
 
         if(json.error){return}
-        
+        if(json.mes=="jwt expired"){
+            localStorage.clear()
+            return push("/loginuser")
+        }
         units.update(old => old.filter(u=>u.id!=id));
 
-        pop();
+        push("/units");
 }
 
     function editUnit(){
@@ -118,12 +130,12 @@ async function deleteWorkRel(){
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center ul">
                             {#if !$worker}
-                        <li class="nav-item rounded border bg-white editP">
+                        <li class="nav-item rounded border hoverEffect bg-white editP">
                             <p on:keypress on:click={editUnit}>Edit <i class="bi bi-pencil-square"></i></p>
                         </li>
-                        <li class="nav-item rounded border bg-white">
+                        <li class="nav-item rounded border hoverEffect bg-white">
                             {#if remove == true}
-                            <p on:keypress on:click={deleteUnit}>Are you sure?</p>
+                            <p on:keypress  on:click={deleteUnit}>Are you sure?</p>
                             {:else}
                             <p on:keypress on:click={deleteClick}>Remove unit <i class="bi bi-trash"></i></p>
                             {/if}
@@ -146,7 +158,7 @@ async function deleteWorkRel(){
                             </li>
                         {/if}
                         {:else}
-                        <li class="nav-item rounded border bg-white">
+                        <li class="nav-item hoverEffect rounded border bg-white">
                             {#if remove == true}
                             <p on:keypress on:click={deleteWorkRel}>Are you sure?</p>
                             {:else}
@@ -234,10 +246,20 @@ async function deleteWorkRel(){
     }
     .task{
         background-color: rgb(236, 236, 236);
+        transition: 0.5s;
         
     }
     .add{
         font-size: 30px;
+    }
+    .task:hover{
+        background-color: rgb(246, 246, 246);
+    }
+    .hoverEffect{
+        transition: 0.5s;
+    }
+    .hoverEffect:hover{
+        box-shadow: 0px 0px 3px -1px;
     }
 
 </style>

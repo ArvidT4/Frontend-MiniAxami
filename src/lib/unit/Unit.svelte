@@ -22,7 +22,15 @@
     }
 div{
     margin: 5px;
+    background-color: rgb(245, 245, 245);
+    transition: 0.5s;
 } 
+div:hover{
+    background-color: white;
+}
+.card:hover{
+    border: 1px solid blue;
+}
 
 </style>
 

@@ -10,5 +10,5 @@ arbetare kunna markera "jag tar jobbet" //klar
 
 Kolla in tasks med active! //klar
 
-Fixa så att user kan lägga till worker på task, mail kvar
+Fixa så att user kan lägga till worker på task, mail kvar //klar
 Fixa så att worker säger nej till uppgift och skicka meddelande om varför 

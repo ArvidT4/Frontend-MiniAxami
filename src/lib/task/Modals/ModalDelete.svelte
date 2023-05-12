@@ -3,7 +3,7 @@
 	export let showModalDelete;
 	export let task;
 	import {token,tasks} from "../../store"
-	import {pop} from "svelte-spa-router"
+	import {pop, push} from "svelte-spa-router"
 	let dialog; 
 
 	//$:console.log(task)
@@ -11,16 +11,23 @@
     
 	async function deleteTask(){
     let response = await fetch('https://mini-axami-server.arvpet0320.repl.co/deleteTask/' + task, {
-        method:'DELETE'
+        method:'DELETE',
+		headers:{
+			"newtoken":token
+		}
     }) 
     let json = await response.json()
+	if(json.mes=="jwt expired"){
+		localStorage.clear()
+            return push("/loginuser")
+        }
     console.log(json)
 
     if(json.error){return}
 
     tasks.update(old => old.filter(t=>t.id!=task));
 
-    console.log(task)
+    //console.log(task)
     pop();
 }
  

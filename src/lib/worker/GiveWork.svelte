@@ -1,5 +1,5 @@
 <script>
-    import { updateWorkRel,token } from "../store";
+    import { token, workRel } from "../store";
 
 
     
@@ -8,7 +8,7 @@
     async function giveWork(){
         
         if(email!=""){
-            let url = "https://mini-axami-server.arvpet0320.repl.co/giveWork";
+            let url = "https://mini-axami-server.arvpet0320.repl.co/giveWork/";
             let response = await fetch(url,{
                 
                 method: 'POST',
@@ -35,7 +35,8 @@
             else{
                 email = ""
             }
-            updateWorkRel.set(true);
+            //console.log(json)
+            workRel.update(old=>[...old,json])
             
         }
         
@@ -47,11 +48,17 @@
     <input type="email" class="form-control text-dark" placeholder="Email" bind:value={email}>
     <label for="floatingInput">Email address</label>
 </div>
-    <button class="btn  btn-outline-primary btn-white" on:click={giveWork}>add</button>
+    <div class="btn btn-outline-primary btn-white" on:keypress on:click={giveWork}><p>add</p></div>
 
 
   <style>
    .form-floating{
         width:100%;
     } 
+    .btn{
+        margin: auto;
+    }
+    p{
+        margin: 10px;
+    }
   </style>

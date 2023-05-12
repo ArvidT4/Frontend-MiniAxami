@@ -9,7 +9,7 @@
     
     //$:console.log(task)
     function onClicked(){
-        push("/TaskInfo/"+task.id)
+        push("/Unitinfo/"+task.unit_id+"/TaskInfo/"+task.id)
     }
        
 </script>
@@ -47,6 +47,12 @@
 .notActive{
     border: 1px solid green;
     border-radius: 8px;
+}
+.card-body{
+    transition: 0.5s;
+}
+.card-body:hover{
+    box-shadow: 0px 0px 7px -1px;
 }
 
 </style>

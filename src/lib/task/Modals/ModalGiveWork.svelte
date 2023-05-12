@@ -1,17 +1,19 @@
 <script>
 	// @ts-nocheck
 	export let showModalGiveWork;
-	export let worker_name
+	export let worker_email
     export let task
     export let id
+	import {push} from "svelte-spa-router"
 	import {token, workRel} from "../../store"
-	let dialog,comment;
-    $:console.log(id)
+    import GiveWork from "../../worker/GiveWork.svelte";
+	let dialog,comment="";
+    //$:console.log(id)
 	$: if (dialog && showModalGiveWork) dialog.showModal();
     let taken = false;
 
     async function giveWorkerWork(){
-        if(worker_name!=""){
+        if(worker_email!="" && comment!=""){
             let url = "https://mini-axami-server.arvpet0320.repl.co/giveWorkerWork";
 
             let response = await fetch(url,{
@@ -20,14 +22,18 @@
                 "Content-Type":"application/json"
             },
                 body: JSON.stringify({
-                    "worker_name":worker_name,
+                    "worker_email":worker_email,
                     "task_id":id,
                     "comment":comment
                 })
             })
             let json = await response.json()
+			if(json.mes=="jwt expired"){
+				localStorage.clear()
+            	return push("/loginuser")
+        	}
             task = json
-            console.log(task)
+            //console.log(task)
         }
             
         
@@ -44,23 +50,29 @@
 >
 	<div on:click|stopPropagation>
 		
-        <div class="container-md">
+        <div class="container-md ">
 			<div class="row">
 				<div class="col">
 					<h4 class="slotHeader">
 						Give work
 					</h4>
 				</div>
-				<div class="col-2">
+				<div class="col-3">
 					<!-- svelte-ignore a11y-autofocus -->
 					<button class="btn btn-primary align-items-end" autofocus on:click={() => dialog.close()}><i class="bi bi-x-square"></i></button>
 				</div>
 			</div>
-            <div class="row">
+			{#if $workRel.length==0}
+			<div class="row">
+				<GiveWork unit_id={task.unit_id}></GiveWork>
+			</div>
+			
+			{:else}
+            <div class="row flex">
                 <div class="col">
-                    <select bind:value={worker_name}>
+                    <select bind:value={worker_email}>
                         {#each $workRel as user}
-                            <option value={user.name}>
+                            <option value={user.email}>
                                 {user.name}
                             </option>
                         {/each}
@@ -68,25 +80,36 @@
                 </div>
                 <div class="col">
                     <h5>Comment</h5>
-                    <input type="text" bind:value={comment}>
+                    <textarea type="text" class="form-control" name="" id="" cols="30" rows="2" bind:value={comment}></textarea>
                 </div>
             </div>
-            <div class="row">
+            <div class="row ">
                 <div class="col buttonCol">
                     <button class="btn btn-primary" on:click={() => dialog.close()} on:click={giveWorkerWork}>Send</button>
                 </div>
             </div>
+			{/if}
         </div>
+		
 	</div>
 </dialog>
 <style>
+	.flex{
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	select{
+		width: 100%;
+		height: 40px;
+	}
     .slotHeader{
-        margin-bottom: 0px;
+        margin-bottom: 30px; 
     }
     .buttonCol{
 		
         margin-top: 20px;
-
+		
     }
 	dialog {
 		max-width: 90%;

@@ -41,5 +41,7 @@ margin-bottom: -20px;
   } */
   a{
     text-decoration: none;
+    transition: 0.5s;
   }
+  
 </style>
