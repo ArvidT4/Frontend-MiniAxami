@@ -4,7 +4,7 @@
         token.set("");
         tasks.set([]);
         localStorage.clear()
-        console.log($tasks)
+        //console.log($tasks)
 
 </script>
 

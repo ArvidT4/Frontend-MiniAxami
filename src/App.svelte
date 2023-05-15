@@ -18,6 +18,7 @@
   import Validate from "./lib/worker/Validate.svelte";
   import EditUnit from "./lib/unit/EditUnit.svelte";
   import EditTask from "./lib/task/EditTask.svelte";
+    import { units } from "./lib/store";
   let routes = {
     "/": Home,
     "/registerUser": RegisterUser,
@@ -34,7 +35,7 @@
     "/UnitInfo/:id/EditUnit/": EditUnit,
     "/UnitInfo/:unit_id/TaskInfo/:id/EditTask/:title": EditTask,
 
-    "*": NotFound
+    "*": Units
   }
 </script>
 

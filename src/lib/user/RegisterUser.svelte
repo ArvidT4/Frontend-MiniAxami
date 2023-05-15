@@ -21,7 +21,7 @@
         })
         const json = await response.json()
         let result = JSON.stringify(json)
-        console.log(result)
+        //console.log(result)
         push("/LoginUser")
     }
 

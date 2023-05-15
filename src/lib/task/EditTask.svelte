@@ -6,37 +6,42 @@
     let id = params.id
     let taskTitle = params.title
     let title="", priority;
-
+    let deadlineClass;
     let deadline = (new Date()).toJSON().slice(0, 10);
+    let date = (new Date()).toJSON().slice(0, 10);
     async function editTask(){
         if(title==""){
             title=taskTitle
         }
-            
-        let url = "https://mini-axami-server.arvpet0320.repl.co/EditTask/"+id;
-        
-        let response = await fetch(url,{
-            
-            method: 'PUT',
-            headers:{
-                "newtoken":$token,
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({
-                "title":title,
-                "deadline": deadline,
-                "priority": priority
-            })
-        })
-        const json = await response.json()
-        if(json.mes=="jwt expired"){
-            localStorage.clear()
-            return push("/loginuser")
-        }
-        tasks.set(json)
-        pop()
-        
 
+        if(deadline>=date){
+            let url = "https://mini-axami-server.arvpet0320.repl.co/EditTask/"+id;
+        
+            let response = await fetch(url,{
+                
+                method: 'PUT',
+                headers:{
+                    "newtoken":$token,
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    "title":title,
+                    "deadline": deadline,
+                    "priority": priority
+                })
+            })
+            const json = await response.json()
+            if(json.mes=="jwt expired"){
+                localStorage.clear()
+                return push("/loginuser")
+            }
+            tasks.set(json)
+            pop()
+        }
+        else{
+            deadlineClass="bg-danger-subtle border border-danger-subtle" 
+            alert("Your deadline is set to a date that has already past")
+        }
     }
     function back(){
         pop()
@@ -74,7 +79,7 @@
             <div class="row">
                 <div class="col text-center">
                     <h4>Deadline</h4>
-                    <input type="date" class="deadline" value={deadline} on:input={e => deadline = e.target.value || deadline}/>
+                    <input type="date" class="deadline {deadlineClass}" value={deadline} on:input={e => deadline = e.target.value || deadline}/>
                 </div>
             </div>
             <div class="text-center button"><button on:click={editTask} class="btn btn-primary mb-3 fs-4">Edit your task</button></div>

@@ -5,41 +5,50 @@
     export let params = {}
     import Navbar from "../Navbar.svelte"
     import {tasks, token} from "../store"
+    import { readable } from "svelte/store";
 
     let priority,title="";
     let id = params.id
+    let deadlineClass;
     let deadline = (new Date()).toJSON().slice(0, 10);
-    //$: console.log(deadline)
+    let realDate = (new Date()).toJSON().slice(0, 10);
     //$: console.log(priority)
+  
     async function addTask(){
         
         let url = "https://mini-axami-server.arvpet0320.repl.co/createTask";
 
         if(title!=""&&title!="You must name your task" ){
-            let response = await fetch(url,{
-            
-                method: 'POST',
-                headers:{
-                    "newtoken": $token,
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify({
-                    "unit_id":id,
-                    "title":title,
-                    "priority":priority,
-                    "deadline":deadline
+                if(deadline>=realDate){
+                    let response = await fetch(url,{
+                    
+                    method: 'POST',
+                    headers:{
+                        "newtoken": $token,
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify({
+                        "unit_id":id,
+                        "title":title,
+                        "priority":priority,
+                        "deadline":deadline
+                    })
                 })
-            })
-            const json = await response.json()
-            if(json.mes=="jwt expired"){
-                localStorage.clear()
-            return push("/loginuser")
+                const json = await response.json()
+                if(json.mes=="jwt expired"){
+                    localStorage.clear()
+                    return push("/loginuser")
+                }
+                tasks.update(old=>[...old,json])
+                push("/UnitInfo/"+id)
+                //console.log(json)
+            }
+            else{
+                deadlineClass="bg-danger-subtle border border-danger-subtle" 
+                alert("Your deadline is set to a date that has already past")
+            }
         }
-            tasks.update(old=>[...old,json])
-            push("/UnitInfo/"+id)
-            //console.log(json)
-        }
-        else title="You must name your task"   
+        else title="You must name your task"    
         
         
     }
@@ -79,7 +88,7 @@
     <div class="row">
         <div class="col text-center">
             <h4>Deadline</h4>
-            <input type="date" class="deadline" value={deadline} on:input={e => deadline = e.target.value || deadline}/>
+            <input type="date" class="deadline {deadlineClass}" value={deadline} on:input={e => deadline = e.target.value || deadline}/>
         </div>
     </div>
     <div class="row">

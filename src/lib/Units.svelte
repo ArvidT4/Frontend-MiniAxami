@@ -36,9 +36,25 @@
 <Navbar></Navbar>
 <h2>YOUR UNITS</h2>
  
-{#each $units as unit}
-<Unit unit={unit}></Unit>
-{/each}
+{#if $units.length==0}
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                {#if worker}
+                    <h5>You have no work at the moment</h5>
+                {:else}
+                    <h5>You have no units, would you like to <a href="/#/CreateUnit">create one?</a></h5>
+                {/if}
+
+            </div>
+        </div>
+    </div>
+{:else}
+    {#each $units as unit}
+        <Unit unit={unit}></Unit>
+    {/each}
+{/if}
+
 
 
 <style>

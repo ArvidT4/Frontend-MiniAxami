@@ -42,6 +42,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+{#if task}
 <dialog
 	bind:this={dialog}
 	class="rounded border"
@@ -93,6 +94,7 @@
 		
 	</div>
 </dialog>
+{/if}
 <style>
 	.flex{
 		display: flex;

@@ -88,7 +88,7 @@ async function deleteWorkRel(){
             })
         }) 
         let json = await response.json()
-        console.log(json)
+        //console.log(json)
 
         if(json.error){return}
         if(json.mes=="jwt expired"){

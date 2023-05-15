@@ -13,7 +13,7 @@
     let response = await fetch('https://mini-axami-server.arvpet0320.repl.co/deleteTask/' + task, {
         method:'DELETE',
 		headers:{
-			"newtoken":token
+			"newtoken":$token
 		}
     }) 
     let json = await response.json()
@@ -21,7 +21,7 @@
 		localStorage.clear()
             return push("/loginuser")
         }
-    console.log(json)
+    //console.log(json)
 
     if(json.error){return}
 

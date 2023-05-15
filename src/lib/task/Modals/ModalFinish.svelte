@@ -6,13 +6,15 @@
 	import {token, activeCount} from "../../store"
 	let dialog, price; 
 	let workerDeadline = (new Date()).toJSON().slice(0, 10);
+	let date = (new Date()).toJSON().slice(0, 10);
 	//$:console.log(task)
 	$: if (dialog && showModalFinish) dialog.showModal();
     let taken = false;
-
+	let deadlineClass;
     let t = JSON.parse(atob($token.split(".")[1]))
     async function finishTask(){
         if(t.name==task.worker){
+			if(workerDeadline>=date){
 				let url = "https://mini-axami-server.arvpet0320.repl.co/finishTask/"+task.id;
 
 				let response = await fetch(url,{
@@ -34,6 +36,11 @@
 				activeCount.set(task.active);
 				//console.log("JSON",json)
 				//console.log("TASK",task)
+			}
+			else{
+				deadlineClass="bg-danger-subtle border border-danger-subtle"
+				alert("Your deadline is set to a date that has already pasted")
+			}
 			
 			
         }
@@ -73,7 +80,7 @@
                 </div>
                 <div class="col">
                     <h5>Deadline</h5>
-                    <input type="date" value={workerDeadline} on:input={e => workerDeadline = e.target.value || workerDeadline}/>
+                    <input type="date" class="{deadlineClass}" value={workerDeadline} on:input={e => workerDeadline = e.target.value || workerDeadline}/>
                 </div>
             </div>
             <div class="row">

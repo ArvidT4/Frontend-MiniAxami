@@ -11,9 +11,11 @@
     import ModalFinish from "./Modals/ModalFinish.svelte";
     import ModalGiveWork from "./Modals/ModalGiveWork.svelte";
     import { pop, push } from "svelte-spa-router";
+    import ModalUnclaim from "./Modals/ModalUnclaim.svelte";
 
     let id = params.id
     let showModal = false;
+    let showModalUnclaim = false;
     let showModalFinish = false;
     let showModalGiveWork = false;
     //console.log($tasks)
@@ -76,7 +78,7 @@
                 return push("/loginuser")
         }
             task = json
-            console.log(task)
+            //console.log(task)
 
             activeCount.set(task.active);
             //console.log(activeCount)
@@ -87,7 +89,7 @@
         
     }
     let worker_email="";
-    $:console.log(worker_email)
+    //$:console.log(worker_email)
     
 
     if(priority==1){
@@ -113,7 +115,7 @@
 </script>
 <Navbar></Navbar>
 
-
+<ModalUnclaim bind:showModalUnclaim bind:task></ModalUnclaim>
 <Modal bind:showModal bind:task></Modal>
 <ModalFinish bind:showModalFinish bind:task></ModalFinish>
 <ModalGiveWork bind:showModalGiveWork bind:worker_email bind:task bind:id></ModalGiveWork>
@@ -147,7 +149,7 @@
             {#if task.worker==t.name}
                 <div class="col">
                     <div class="koll hoverEffect p-1 rounded border">
-                        <h5 on:keypress on:click={claimTask}>Unclaim task</h5>
+                        <h5 on:keypress on:click={() => (showModalUnclaim = true)}>Unclaim task</h5>
                     </div>
                 </div>
                 <div class="col rounded ">
@@ -187,7 +189,7 @@
                     {#if task.worker==t.name}
                         <div class="col">
                             <div class="koll hoverEffect p-1 rounded border">
-                                <h5 on:keypress on:click={claimTask}>Unclaim task</h5>
+                                <h5 on:keypress on:click={() => (showModalUnclaim = true)}>Unclaim task</h5>
                             </div>
                         </div>
                         <div class="col rounded ">
