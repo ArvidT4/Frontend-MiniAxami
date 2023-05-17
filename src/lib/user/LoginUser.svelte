@@ -1,5 +1,5 @@
 <script>
-    import { token, worker } from "../store";
+    import { token, units, worker } from "../store";
     import {push,pop,replace} from "svelte-spa-router"
 
 
@@ -22,6 +22,7 @@
         })
         const json = await response.json()
         $token = json.newToken
+        units.set([])
         worker.set(false)
         push('/Units')
     }

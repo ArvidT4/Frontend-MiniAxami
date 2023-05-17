@@ -40,7 +40,7 @@
     <div class="container text-center">
         <div class="row">
             <div class="col">
-                {#if worker}
+                {#if $worker}
                     <h5>You have no work at the moment</h5>
                 {:else}
                     <h5>You have no units, would you like to <a href="/#/CreateUnit">create one?</a></h5>

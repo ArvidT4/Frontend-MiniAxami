@@ -4,6 +4,7 @@
       let code;
       $: localStorage.clear()
       async function registerWorker(){
+        localStorage.clear()
           
           let url = "https://mini-axami-server.arvpet0320.repl.co/code";
           let response = await fetch(url,{

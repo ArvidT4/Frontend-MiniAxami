@@ -78,7 +78,7 @@
             <input class="form-control {classAdress}" type="text" bind:value={adress}>
             <h4>Description</h4>
             <textarea class="form-control {classDescription}" cols="36" rows="5" bind:value={description}></textarea>
-            <div class="text-center button"><button on:click={editUnit} class="btn btn-primary mb-3 fs-4">Edit your unit</button></div>
+            <div class="text-center button"><button on:click={editUnit} class="btn btn-primary mb-3 fs-4">Save</button></div>
         </div>
     </div>
 </main>

@@ -7,7 +7,7 @@
     import {tasks, token} from "../store"
     import { readable } from "svelte/store";
 
-    let priority,title="";
+    let priority,title="", deadlineTitle="Deadline", deadlineTitleClass="";
     let id = params.id
     let deadlineClass;
     let deadline = (new Date()).toJSON().slice(0, 10);
@@ -45,7 +45,8 @@
             }
             else{
                 deadlineClass="bg-danger-subtle border border-danger-subtle" 
-                alert("Your deadline is set to a date that has already past")
+                deadlineTitle="Your deadline is set to a date that has already pasted"
+				deadlineTitleClass="text-danger"
             }
         }
         else title="You must name your task"    
@@ -87,7 +88,7 @@
     </div>
     <div class="row">
         <div class="col text-center">
-            <h4>Deadline</h4>
+            <h4 class="{deadlineTitleClass}">{deadlineTitle}</h4>
             <input type="date" class="deadline {deadlineClass}" value={deadline} on:input={e => deadline = e.target.value || deadline}/>
         </div>
     </div>

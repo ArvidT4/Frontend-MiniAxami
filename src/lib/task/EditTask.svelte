@@ -5,7 +5,7 @@
     export let params = {}
     let id = params.id
     let taskTitle = params.title
-    let title="", priority;
+    let title="", priority, deadlineTitle="Deadline", deadlineTitleClass="";
     let deadlineClass;
     let deadline = (new Date()).toJSON().slice(0, 10);
     let date = (new Date()).toJSON().slice(0, 10);
@@ -40,7 +40,8 @@
         }
         else{
             deadlineClass="bg-danger-subtle border border-danger-subtle" 
-            alert("Your deadline is set to a date that has already past")
+            deadlineTitle="Your deadline is set to a date that has already pasted"
+			deadlineTitleClass="text-danger"
         }
     }
     function back(){
@@ -78,11 +79,11 @@
             </div>
             <div class="row">
                 <div class="col text-center">
-                    <h4>Deadline</h4>
+                    <h4 class="{deadlineTitleClass}">{deadlineTitle}</h4>
                     <input type="date" class="deadline {deadlineClass}" value={deadline} on:input={e => deadline = e.target.value || deadline}/>
                 </div>
             </div>
-            <div class="text-center button"><button on:click={editTask} class="btn btn-primary mb-3 fs-4">Edit your task</button></div>
+            <div class="text-center button"><button on:click={editTask} class="btn btn-primary mb-3 fs-4">Save</button></div>
         </div>
     </div>
 </main>

@@ -33,10 +33,11 @@
                 email = json
             }
             else{
+                workRel.update(old=>[...old,json])
                 email = ""
             }
             //console.log(json)
-            workRel.update(old=>[...old,json])
+            
             
         }
         

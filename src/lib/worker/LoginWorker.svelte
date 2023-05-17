@@ -1,6 +1,6 @@
 <script>
     import {push} from "svelte-spa-router"
-    import {token, worker} from "../store"
+    import {token, units, worker} from "../store"
       let email;
       $: localStorage.clear()
       async function loginWorker(){
@@ -20,6 +20,7 @@
           const json = await response.json()
           //console.log(json)
           token.set(json.token)
+          units.set([])
           push("/ValidateCode")
           //console.log($token)
       }

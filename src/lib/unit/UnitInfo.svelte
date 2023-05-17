@@ -5,7 +5,10 @@ import {units,token,tasks,worker, workRel} from "../store"
 import Task from "../task/Task.svelte";
 import GiveWork from "../worker/GiveWork.svelte";
     import EditUnit from "./EditUnit.svelte";
+    import DeleteRel from "./Modals/DeleteRel.svelte";
+    import Worker from "./Worker.svelte";
 export let params = {}
+let showModalDelete=false;
 let id = params.id
 
     //console.log(params)
@@ -84,7 +87,10 @@ async function deleteWorkRel(){
             },
             body: JSON.stringify({
                 "worker_id": t.id,
-                "unit_id": id
+                "unit_id": id,
+                "workerBool":true,
+                "workerName":"",
+                "workerEmail":""
             })
         }) 
         let json = await response.json()
@@ -109,6 +115,7 @@ async function deleteWorkRel(){
 
 </script>
 <Navbar></Navbar>
+
 <main>
     <div class="row gx-3 text-start">
         <div class="col">
@@ -152,20 +159,20 @@ async function deleteWorkRel(){
                                 <h5>Alla arbetare kopplade</h5>
                                 
                                     {#each $workRel as user}
-                                    <p>{user.name} : {user.email}</p>
+                                        <Worker user={user} unit_id={id} showModalDelete={showModalDelete}></Worker>
                                     {/each}
                             
                             </li>
                         {/if}
                         {:else}
-                        <li class="nav-item hoverEffect rounded border bg-white">
-                            {#if remove == true}
-                            <p on:keypress on:click={deleteWorkRel}>Are you sure?</p>
-                            {:else}
-                            <p on:keypress on:click={deleteClick}>Remove unit <i class="bi bi-trash"></i></p>
-                            {/if}
-                            
-                        </li>
+                            <li class="nav-item hoverEffect rounded border bg-white">
+                                {#if remove == true}
+                                <p on:keypress on:click={deleteWorkRel}>Are you sure?</p>
+                                {:else}
+                                <p on:keypress on:click={deleteClick}>Remove unit <i class="bi bi-trash"></i></p>
+                                {/if}
+                                
+                            </li>
                         {/if}
                         
                         </ul>
@@ -204,6 +211,7 @@ async function deleteWorkRel(){
 </main>
 
 <style>
+    
     .backBtn{
         margin: auto 5px;
         margin-top: -15px;
@@ -261,5 +269,6 @@ async function deleteWorkRel(){
     .hoverEffect:hover{
         box-shadow: 0px 0px 3px -1px;
     }
+    
 
 </style>

@@ -4,7 +4,8 @@
 	export let task;
 	import {push} from "svelte-spa-router"
 	import {token, activeCount} from "../../store"
-	let dialog, price; 
+	let dialog, deadlineTitle="Deadline", deadlineTitleClass, price; 
+
 	let workerDeadline = (new Date()).toJSON().slice(0, 10);
 	let date = (new Date()).toJSON().slice(0, 10);
 	//$:console.log(task)
@@ -39,7 +40,8 @@
 			}
 			else{
 				deadlineClass="bg-danger-subtle border border-danger-subtle"
-				alert("Your deadline is set to a date that has already pasted")
+				deadlineTitle="Your deadline is set to a date that has already pasted"
+				deadlineTitleClass="text-danger"
 			}
 			
 			
@@ -79,7 +81,7 @@
                     <input class="form-floating" type="number" bind:value={price}>
                 </div>
                 <div class="col">
-                    <h5>Deadline</h5>
+                    <h5 class="{deadlineTitleClass}">{deadlineTitle}</h5>
                     <input type="date" class="{deadlineClass}" value={workerDeadline} on:input={e => workerDeadline = e.target.value || workerDeadline}/>
                 </div>
             </div>
